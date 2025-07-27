@@ -1,112 +1,139 @@
-# 🛍️ Simple E-Commerce Flutter App
+# 🧱 Clean Architecture – Domain Layer Implementation (Product CRUD)
 
-This project is a basic Flutter mobile application designed to demonstrate
- **navigation and routing** features in an e-commerce context. 
- Users can **view**, **create**, **update**, and **delete** products.
+This module implements the **Product Entity**, **CRUD Use Cases**, and 
+**Repository** logic for the eCommerce app using **Clean Architecture** and **TDD** principles.
 
-## 📱 App Features
+---
 
-- ✅ **Home Screen** – Displays a list of all products.
+## ✅ What Has Been Implemented
 
-- ✅ **Product Details Screen** – View detailed information about a selected product.
+### 📌 Entity
 
-- ✅ **Add/Edit Product Screen** – Create a new product or edit an existing one.
+- Defined in: `domain/entities/product.dart`
+- Fields: `id`, `name`, `description`, `price`, `imageUrl`
+- Fully tested: `test/domain/entities/product_test.dart`
 
-- ✅ **Named Routing** – Uses Flutter’s named routes for clean navigation.
+---
 
-- ✅ **Data Passing Between Screens** – Product data is passed seamlessly between screens.
+### 📌 Use Cases
 
-- ✅ **Navigation Animations** – Smooth transitions enhance user experience.
+Each use case is implemented using a `call()` method and located in `domain/usecases/`:
 
-- ✅ **Back Navigation Handling** – Proper back button behavior across screens.
+| File                                | Purpose              |
+|-------------------------------------|-----------------------|
+| `insert_product_usecase.dart`       | Insert a product      |
+| `update_product_usecase.dart`       | Update a product      |
+| `delete_product_usecase.dart`       | Delete a product      |
+| `get_product_usecase.dart`          | Retrieve a product    |
 
+- Fully unit tested in: `test/domain/usecases/`
+- Shared testing tools in:
+  - `usecase_test_helper.dart`
+  - `usecase_test_helper.mocks.dart`
 
-## 🚀 Getting Started
-### 1. Clone the Repository
+---
+
+### 📌 Repositories
+
+- Interface: `domain/repositories/product_repository.dart`
+- Implementation: `data/repositories/product_repository_impl.dart`
+- Delegates correctly to use cases and handles errors via `core/error`
+- Tested in: `test/data/repositories/product_repository_impl_test.dart`
+
+---
+
+### 📌 Error Handling (Core)
+
+- Custom failure/exception classes:
+  - `core/error/exceptions.dart`
+  - `core/error/failures.dart`
+- Tested in: `test/core/error/failure_test.dart`
+
+---
+
+### 📌 Testing (TDD)
+
+- Full unit test coverage for:
+  - Entity
+  - Use cases
+  - Repository
+  - Error handling
+- Mocking is used for isolation where required.
+
+---
+
+## 📁 Folder Structure
 
 ```
-git clone https://github.com/game-ale/flutter-ecommerce-navigation.git
-cd flutter-ecommerce-navigation
-```
-2. Install Dependencies
-```
-flutter pub get
-```
-3. Run the App
+┣ 📂lib
+┃ ┣ 📂core
+┃ ┃ ┗ 📂error
+┃ ┃   ┣ 📜exceptions.dart
+┃ ┃   ┗ 📜failures.dart
+┃ ┣ 📂data
+┃ ┃ ┣ 📂models
+┃ ┃ ┃ ┗ 📜product_model.dart
+┃ ┃ ┗ 📂repositories
+┃ ┃   ┗ 📜product_repository_impl.dart
+┃ ┣ 📂domain
+┃ ┃ ┣ 📂entities
+┃ ┃ ┃ ┗ 📜product.dart
+┃ ┃ ┣ 📂repositories
+┃ ┃ ┃ ┗ 📜product_repository.dart
+┃ ┃ ┗ 📂usecases
+┃ ┃   ┣ 📜delete_product_usecase.dart
+┃ ┃   ┣ 📜get_product_usecase.dart
+┃ ┃   ┣ 📜insert_product_usecase.dart
+┃ ┃   ┗ 📜update_product_usecase.dart
+┃ ┣ 📂presentation
+┃ ┃ ┣ 📂common
+┃ ┃ ┃ ┣ 📂themes
+┃ ┃ ┃ ┃ ┣ 📜app_colors.dart
+┃ ┃ ┃ ┃ ┗ 📜text_styles.dart
+┃ ┃ ┃ ┗ 📂widgets
+┃ ┃ ┃   ┣ 📜icons_box.dart
+┃ ┃ ┃   ┣ 📜input_inserted.dart
+┃ ┃ ┃   ┗ 📜input_type_name.dart
+┃ ┃ ┣ 📜components
+┃ ┃ ┣ 📜pages
+┃ ┃ ┗ 📜product_models
+┃ ┗ 📜main.dart
 
 ```
-flutter run
-```
-Make sure a device/emulator is connected before running the app.
 
-📂 Project Structure
-
+## for test
 ```
-lib/
-┣ 📂common
-┃ ┣ 📂themes
-┃ ┃ ┣ 📜app_colors.dart
-┃ ┃ ┗ 📜text_styles.dart
-┃ ┗ 📂widgets
-┃   ┣ 📜icons_box.dart
-┃   ┣ 📜input_inserted.dart
-┃   ┗ 📜input_type_name.dart
-┣ 📂components
-┃ ┣ 📜product_card.dart
-┃ ┣ 📜product_category.dart
-┃ ┣ 📜rating.dart
-┃ ┗ 📜shoe_sizes.dart
-┣ 📂pages
-┃ ┣ 📜add_update_page.dart
-┃ ┣ 📜details_page.dart
-┃ ┣ 📜home_page.dart
-┃ ┗ 📜search_page.dart
-┣ 📂product_models
-┃ ┣ 📜product_manager.dart
-┃ ┣ 📜product.dart
-┃ ┗ 📜sample_products.dart
-┗ 📜main.dart
+📂test
+┃ ┣ 📂test
+┃ ┃ ┣ 📂core
+┃ ┃ ┃ ┗ 📂error
+┃ ┃ ┃   ┗ 📜failure_test.dart
+┃ ┃ ┣ 📂data
+┃ ┃ ┃ ┣ 📂datasources
+┃ ┃ ┃ ┃ ┗ 📜product_remote_datasource_test.dart
+┃ ┃ ┃ ┗ 📂repositories
+┃ ┃ ┃   ┗ 📜product_repository_impl_test.dart
+┃ ┃ ┗ 📂domain
+┃ ┃   ┣ 📂entities
+┃ ┃   ┃ ┗ 📜product_test.dart
+┃ ┃   ┗ 📂usecases
+┃ ┃     ┣ 📜delete_product_usecase_test.dart
+┃ ┃     ┣ 📜get_product_usecase_test.dart
+┃ ┃     ┣ 📜insert_product_usecase_test.dart
+┃ ┃     ┣ 📜update_product_usecase_test.dart
+┃ ┃     ┣ 📜usecase_test_helper.dart
+┃ ┃     ┗ 📜usecase_test_helper.mocks.dart
+┃ ┗ 📜widget_test.dart
+
 ```
 
-🔄 Navigation Overview
-From	To	Trigger
-Home Screen	Product Detail	Tap on product card
-Home Screen	Add Product	Tap "Add" button
-Product Detail	Edit Product	Tap "Edit" icon
-Add/Edit Screen	Back to Home	Save or press back button
+---
 
-Named routes are used throughout to ensure a maintainable and scalable codebase.
+## 🧼 Code Quality
 
-✨ Screenshots
+- Clean file naming and architecture
+- Fully separated concerns by layer
+- All logic testable and documented
+- Followed Dart/Flutter best practices
 
-
-
-### 🏠 Home Screen
-![Home Screen](assets/homepage.png)
-
-### 📄 Product Detail Screen
-![Product Detail](assets/homepage3.png)
-
-### ➕ Add/Edit Product Screen
-![Add/Edit Screen](assets/homepage1.png)
-
-### search of product 
-![search of product](assets/homepage2.png)
-
-
-📘 Additional Notes
-The app uses in-memory product data; no external database is used.
-
-Navigation transitions are implemented using PageRouteBuilder with animations.
-
-Designed with Flutter best practices in mind for readability and scalability.
-
-
-
-
-
-
-
-
-
-
+---
