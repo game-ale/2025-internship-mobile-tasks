@@ -26,7 +26,6 @@ class ProductRepositoryImpl implements ProductRepository {
         final remoteProducts = await remoteDataSource.fetchAllProducts();
         await localDataSource.cacheProducts(remoteProducts);
 
-        // Convert List<ProductModel> to List<Product>
         final products = remoteProducts.map<Product>((model) => model).toList();
         return Right(products);
       } on ServerException {
@@ -49,7 +48,7 @@ class ProductRepositoryImpl implements ProductRepository {
     if (await networkInfo.isConnected) {
       try {
         final productModel = await remoteDataSource.fetchProductById(id);
-        return Right(productModel); // ProductModel extends Product
+        return Right(productModel);
       } on ServerException {
         return Left(ServerFailure());
       }
@@ -68,9 +67,9 @@ class ProductRepositoryImpl implements ProductRepository {
 
   @override
   Future<Either<Failure, void>> createProduct(Product product) async {
-    // Normally you'd call remoteDataSource to create product
+    
     try {
-      // Example: await remoteDataSource.createProduct(product as ProductModel);
+      
       return const Right(null);
     } on ServerException {
       return Left(ServerFailure());
@@ -80,7 +79,7 @@ class ProductRepositoryImpl implements ProductRepository {
   @override
   Future<Either<Failure, void>> updateProduct(Product product) async {
     try {
-      // Example: await remoteDataSource.updateProduct(product as ProductModel);
+  
       return const Right(null);
     } on ServerException {
       return Left(ServerFailure());
@@ -90,7 +89,7 @@ class ProductRepositoryImpl implements ProductRepository {
   @override
   Future<Either<Failure, void>> deleteProduct(String id) async {
     try {
-      // Example: await remoteDataSource.deleteProduct(id);
+     
       return const Right(null);
     } on ServerException {
       return Left(ServerFailure());
